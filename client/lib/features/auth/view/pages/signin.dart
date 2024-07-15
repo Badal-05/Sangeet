@@ -7,6 +7,7 @@ import 'package:client/features/auth/view/widgets/custom_auth_button.dart';
 import 'package:client/features/auth/view/widgets/custom_text_field.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
 import 'package:client/features/home/view/pages/homepage.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,8 +57,8 @@ class _SigninPageState extends ConsumerState<SigninPage> {
     ref.listen(authViewmodelProvider, (prev, next) {
       next?.when(
           data: (data) {
-            // Navigator.of(context).push(
-            //     MaterialPageRoute(builder: (context) => const Homepage()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const Homepage()));
           },
           error: (error, stacktrace) {
             displaySnackBar(context, error.toString());

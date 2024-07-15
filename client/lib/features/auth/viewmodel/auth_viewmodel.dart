@@ -1,6 +1,7 @@
 import 'package:client/features/auth/model/user_model.dart';
+import 'package:client/features/auth/repositories/auth_local_repo.dart';
 import 'package:client/features/auth/repositories/auth_remote_repo.dart';
-import 'package:fpdart/fpdart.dart' as fpdart;
+import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_viewmodel.g.dart';
@@ -12,12 +13,18 @@ class AuthViewmodel extends _$AuthViewmodel {
   // we didn't use the above line because we need to add it into the build function,
   // this way everytime the build function gets called we update the value of _authRemoteRepo;
   late AuthRemoteRepo _authRemoteRepo;
+  late AuthLocalRepo _authLocalRepo;
 
   @override
   AsyncValue<UserModel>? build() {
     //we have used async value to represent all the states. Data, loading, error
     _authRemoteRepo = ref.watch(authRemoteRepoProvider);
+    _authLocalRepo = ref.watch(authLocalRepoProvider);
     return null;
+  }
+
+  Future<void> initSharedPreferences() async {
+    await _authLocalRepo.init();
   }
 
   Future<void> signup({
@@ -32,11 +39,11 @@ class AuthViewmodel extends _$AuthViewmodel {
       password: password,
     );
     final val = switch (res) {
-      fpdart.Left(value: final l) => state = AsyncValue.error(
+      Left(value: final l) => state = AsyncValue.error(
           l.err,
           StackTrace.current,
         ),
-      fpdart.Right(value: final r) => state = AsyncValue.data(r),
+      Right(value: final r) => state = AsyncValue.data(r),
     };
     print(val);
   }
@@ -51,10 +58,22 @@ class AuthViewmodel extends _$AuthViewmodel {
       password: password,
     );
     final val = switch (res) {
-      fpdart.Left(value: final l) => state =
+      Left(value: final l) => state =
           AsyncValue.error(l.err, StackTrace.current),
-      fpdart.Right(value: final r) => state = AsyncValue.data(r)
+      // fpdart.Right(value: final r) => state = AsyncValue.data(r)
+      // here we wanted to set token along with setting the data, but we cannot use block functions in pattern matching so we used a function.
+      Right(value: final r) => _loginSuccess(r),
     };
     print(val);
+  }
+
+  AsyncValue<UserModel>? _loginSuccess(UserModel user) {
+    _authLocalRepo.setToken(user.token);
+    return state = AsyncValue.data(user);
+  }
+
+  Future<UserModel?> getData() async {
+    state = const AsyncValue.loading();
+    final token = _authLocalRepo.getToken();
   }
 }
