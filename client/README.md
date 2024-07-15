@@ -1,16 +1,18 @@
-# client
+# Music Streaming App
 
-A new Flutter project.
+A feature-rich music streaming application built with MVVM architecture.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- User authentication (login/signup)
+- Song playback (play/pause)
+- Song upload functionality
+- Playlist management:
+  - Recently played songs
+  - Liked songs
+- Background music playback
+- Notification controls for music playback
 
-A few resources to get you started if this is your first Flutter project:
+## Architecture
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This app follows the MVVM (Model-View-ViewModel) architecture pattern.
