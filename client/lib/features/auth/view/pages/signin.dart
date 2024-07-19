@@ -52,13 +52,19 @@ class _SigninPageState extends ConsumerState<SigninPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewmodelProvider)?.isLoading == true;
+    final isLoading = ref
+        .watch(authViewmodelProvider.select((val) => val?.isLoading == true));
 
     ref.listen(authViewmodelProvider, (prev, next) {
       next?.when(
           data: (data) {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Homepage()));
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Homepage(),
+              ),
+              (_) => false,
+            );
           },
           error: (error, stacktrace) {
             displaySnackBar(context, error.toString());

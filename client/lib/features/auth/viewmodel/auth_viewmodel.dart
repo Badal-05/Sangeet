@@ -1,3 +1,4 @@
+import 'package:client/core/notifiers/current_user_notifier.dart';
 import 'package:client/features/auth/model/user_model.dart';
 import 'package:client/features/auth/repositories/auth_local_repo.dart';
 import 'package:client/features/auth/repositories/auth_remote_repo.dart';
@@ -14,12 +15,14 @@ class AuthViewmodel extends _$AuthViewmodel {
   // this way everytime the build function gets called we update the value of _authRemoteRepo;
   late AuthRemoteRepo _authRemoteRepo;
   late AuthLocalRepo _authLocalRepo;
+  late CurrentUserNotifier _currentUserNotifier;
 
   @override
   AsyncValue<UserModel>? build() {
     //we have used async value to represent all the states. Data, loading, error
     _authRemoteRepo = ref.watch(authRemoteRepoProvider);
     _authLocalRepo = ref.watch(authLocalRepoProvider);
+    _currentUserNotifier = ref.watch(currentUserNotifierProvider.notifier);
     return null;
   }
 
@@ -68,6 +71,7 @@ class AuthViewmodel extends _$AuthViewmodel {
   }
 
   AsyncValue<UserModel>? _loginSuccess(UserModel user) {
+    _currentUserNotifier.addUser(user);
     _authLocalRepo.setToken(user.token);
     return state = AsyncValue.data(user);
   }
@@ -80,10 +84,15 @@ class AuthViewmodel extends _$AuthViewmodel {
       final val = switch (res) {
         Left(value: final l) => state =
             AsyncValue.error(l.err, StackTrace.current),
-        Right(value: final r) => state = AsyncValue.data(r),
+        Right(value: final r) => _getDataSuccess(r),
       };
       return val.value;
     }
     return null;
+  }
+
+  AsyncValue<UserModel> _getDataSuccess(UserModel user) {
+    _currentUserNotifier.addUser(user);
+    return state = AsyncData(user);
   }
 }
