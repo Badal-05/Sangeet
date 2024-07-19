@@ -108,6 +108,8 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                                 email: emailController.text,
                                 password: passwordController.text,
                               );
+                        } else {
+                          displaySnackBar(context, 'Missing Fields');
                         }
                         //print(val);
                       },

@@ -122,6 +122,8 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                 email: emailController.text,
                                 password: passwordController.text,
                               );
+                        } else {
+                          displaySnackBar(context, 'Missing Fields');
                         }
 
                         //print(val);
