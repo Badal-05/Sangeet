@@ -3,6 +3,7 @@ import 'package:client/core/theme/theme.dart';
 
 import 'package:client/features/auth/view/pages/signup.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:client/features/home/view/pages/homepage.dart';
 
 import 'package:client/features/home/view/pages/upload_song_page.dart';
 
@@ -39,7 +40,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: "Sangeet",
       theme: AppTheme.darkTheme,
-      home: currentUser == null ? const SignupPage() : const UploadSongPage(),
+      home: currentUser == null ? const SignupPage() : const Homepage(),
     );
   }
 }
