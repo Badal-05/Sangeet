@@ -3,7 +3,7 @@ import 'package:client/core/theme/theme.dart';
 
 import 'package:client/features/auth/view/pages/signup.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
-import 'package:client/features/home/view/pages/homepage.dart';
+
 import 'package:client/features/home/view/pages/upload_song_page.dart';
 
 import 'package:flutter/material.dart';
@@ -34,6 +34,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserNotifierProvider);
+    //print(currentUser == null);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Sangeet",
