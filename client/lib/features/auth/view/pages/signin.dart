@@ -6,7 +6,7 @@ import 'package:client/features/auth/view/pages/signup.dart';
 import 'package:client/features/auth/view/widgets/custom_auth_button.dart';
 import 'package:client/core/widgets/custom_text_field.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
-import 'package:client/features/home/view/pages/homepage.dart';
+import 'package:client/features/home/view/pages/home_page.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

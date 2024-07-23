@@ -1,4 +1,7 @@
 import 'package:client/core/theme/app_pallete.dart';
+import 'package:client/features/home/view/pages/library_page.dart';
+import 'package:client/features/home/view/pages/songs_page.dart';
+import 'package:client/features/home/view/widgets/music_slab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,6 +14,12 @@ class Homepage extends ConsumerStatefulWidget {
 
 class _HomepageState extends ConsumerState<Homepage> {
   int state = 0;
+
+  final pages = [
+    const SongsPage(),
+    const LibraryPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +52,16 @@ class _HomepageState extends ConsumerState<Homepage> {
                   : Pallete.inactiveBottomBarItemColor,
             ),
             label: 'Library',
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          pages[state],
+          const Positioned(
+            left: 8,
+            bottom: 0,
+            child: MusicSlab(),
           ),
         ],
       ),
