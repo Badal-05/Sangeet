@@ -41,12 +41,13 @@ class MusicSlab extends ConsumerWidget {
       },
       child: Stack(
         children: [
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 400),
             padding: const EdgeInsets.all(8),
             height: 66,
             width: MediaQuery.of(context).size.width - 16,
             decoration: BoxDecoration(
-              color: hexToRGB(currSong.hex_code),
+              color: hexToRGB(currSong.hex_code).withOpacity(0.5),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Row(

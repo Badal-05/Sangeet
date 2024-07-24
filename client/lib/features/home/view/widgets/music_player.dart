@@ -68,11 +68,16 @@ class MusicPlayer extends ConsumerWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            currentSong.song_name,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - 100,
+                            child: Text(
+                              currentSong.song_name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                           Text(
