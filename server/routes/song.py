@@ -2,11 +2,14 @@
 
 import uuid
 from fastapi import APIRouter, Depends, File, Form, UploadFile
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session,joinedload
 
 from database import get_db
 from middleware.auth_middleware import auth_middleware
+
+from models.favorite import Favorite
 from models.song import Song
+from pydantic_schemas.favourite_song import FavoriteSong
 
 router = APIRouter()
 
@@ -55,3 +58,32 @@ def list_songs(db : Session = Depends(get_db), auth_details : Session = Depends(
     songs = db.query(Song).all()
     return songs
     pass
+
+
+# here we have 3 options to implement favorite song. 
+# 1. we can add a new attribute to the user class, to check which all songs are the in the user's favorite section.
+# 2. we can add a new column to song class to check which all users have added it to their favorite.
+# 3. Or we can create a seperate favorite table.
+
+# We will prefer option 3 beacuse it follows 1NF.
+
+
+@router.post('/favorite')
+def favorite_song(song : FavoriteSong,db : Session = Depends(get_db), x_auth_dict : Session = Depends(auth_middleware)):
+    user_id = x_auth_dict['uid']
+    fav_song = db.query(Favorite).filter(Favorite.song_id == song.song_id, Favorite.user_id == user_id).first()
+    if fav_song: 
+        db.delete(fav_song)
+        db.commit()
+        return {'message' : False}
+    else:
+        new_fav = Favorite(fav_id = str(uuid.uuid4()), song_id = song.song_id, user_id = user_id)
+        db.add(new_fav)
+        db.commit()
+        return {'message' : True}
+    
+@router.get('/list/favorites')
+def list_fav_songs(db : Session = Depends(get_db), auth_detail : Session = Depends(auth_middleware)):
+    user_id = auth_detail['uid']
+    songs = db.query(Favorite).filter(Favorite.user_id == user_id).options(joinedload(Favorite.song)).all()
+    return songs

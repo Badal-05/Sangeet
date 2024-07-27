@@ -1,5 +1,6 @@
 from sqlalchemy import Column,TEXT,VARCHAR,LargeBinary
 from models.base import Base
+from sqlalchemy.orm import relationship
 
 
 # creating the schema for a table. The table will be created using these attributes.
@@ -11,4 +12,4 @@ class User(Base):
     email = Column(VARCHAR(100))
     password = Column(LargeBinary)
 
-    
+    favorites = relationship('Favorite', back_populates='user')

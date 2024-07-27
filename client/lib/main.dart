@@ -43,7 +43,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserNotifierProvider);
-    //print(currentUser == null);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Sangeet",

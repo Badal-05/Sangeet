@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:client/core/constants/server_constants.dart';
@@ -82,6 +83,71 @@ class HomeRepository {
 
       for (final map in resBodyMap) {
         songs.add(SongModel.fromMap(map));
+      }
+
+      return Right(songs);
+    } catch (e) {
+      return Left(AppFailure(err: e.toString()));
+    }
+  }
+
+  Future<Either<AppFailure, bool>> favoriteSong({
+    required String token,
+    required String songId,
+  }) async {
+    try {
+      final res = await http.post(
+        Uri.parse(
+          '${ServerConstants.serverUrl}/song/favorite',
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token,
+        },
+        body: jsonEncode(
+          {
+            'song_id': songId,
+          },
+        ),
+      );
+      var resBodyMap = jsonDecode(res.body);
+      if (res.statusCode != 200) {
+        // if the status code is not 200 then we will get a map.
+        resBodyMap = resBodyMap as Map<String, dynamic>;
+        return Left(AppFailure(err: resBodyMap['detail']));
+      }
+
+      return Right(resBodyMap['message']);
+    } catch (e) {
+      return Left(AppFailure(err: e.toString()));
+    }
+  }
+
+  Future<Either<AppFailure, List<SongModel>>> getAllFavSongs(
+      {required String token}) async {
+    try {
+      final res = await http.get(
+        Uri.parse(
+          '${ServerConstants.serverUrl}/song/list/favorites',
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token,
+        },
+      );
+      var resBodyMap = jsonDecode(res.body);
+      if (res.statusCode != 200) {
+        // if the status code is not 200 then we will get a map.
+        resBodyMap = resBodyMap as Map<String, dynamic>;
+        return Left(AppFailure(err: resBodyMap['detail']));
+      }
+      //otherwise we will get a List<Map>.
+      resBodyMap = resBodyMap as List;
+
+      List<SongModel> songs = [];
+
+      for (final map in resBodyMap) {
+        songs.add(SongModel.fromMap(map['song']));
       }
 
       return Right(songs);
