@@ -16,12 +16,17 @@ router = APIRouter()
 import cloudinary
 import cloudinary.uploader
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Configuration       
 cloudinary.config( 
-    cloud_name = "dlbrthqw8", 
-    api_key = "648215727194124", 
-    api_secret = "3WR05XLBHu8Rs8WW_k9IROeDVrE", # Click 'View Credentials' below to copy your API secret
+    cloud_name = os.getenv('CLOUDNAME'), 
+    api_key = os.getenv('APIKEY'), 
+    api_secret = os.getenv('APISECRET'), # Click 'View Credentials' below to copy your API secret
     secure=True
 )
 

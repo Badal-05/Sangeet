@@ -10,6 +10,10 @@ from sqlalchemy.orm import Session
 from pydantic_schemas.login_user import UserLogin
 import jwt
 from sqlalchemy.orm import joinedload
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 #  APIRouter will mimic all the functionalities of the @app methods (ie : get, post etc)
 router = APIRouter() 
@@ -37,7 +41,7 @@ def login_user(user : UserLogin, db : Session = Depends(get_db)):
     if not is_pw_match:
         raise HTTPException(400,'Incorrect password!')
     
-    token = jwt.encode({'id': user_db.id}, 'password_key')
+    token = jwt.encode({'id': user_db.id}, os.getenv('JWTKEY'))
 
     return {'token' : token, 'user' : user_db}
 
