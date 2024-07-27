@@ -34,10 +34,17 @@ class SongsPage extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 40, left: 16),
+            child: Text(
+              'Recently Played',
+              style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 36),
             child: SizedBox(
-              height: 280,
+              height: 250,
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 200,
